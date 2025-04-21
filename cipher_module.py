@@ -33,6 +33,18 @@ def process_playfair(text):
             i += 2
         pairs.append((a, b))
     return pairs
+    
+def clean_playfair_output(text):
+    cleaned = ''
+    i = 0
+    while i < len(text):
+        cleaned += text[i]
+        if i+2 < len(text) and text[i] == text[i+2] and text[i+1] == 'X':
+            i += 2  # skip X
+        else:
+            i += 1
+    return cleaned
+
 
 def playfair_encrypt(text, key):
     matrix = generate_playfair_matrix(key)
@@ -62,5 +74,5 @@ def playfair_decrypt(text, key):
             plaintext += matrix[(ax-1)%5][ay] + matrix[(bx-1)%5][by]
         else:
             plaintext += matrix[ax][by] + matrix[bx][ay]
-    return plaintext
+    return clean_playfair_output(plaintext)
 
