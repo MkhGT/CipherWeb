@@ -1,10 +1,11 @@
-import numpy as np
+# playfair.py
 import string
 
 ALPHABET = string.ascii_uppercase
-MODULO = 26
 
-### PLAYFAIR CIPHER ###
+def clean_text(text):
+    return ''.join(filter(str.isalpha, text.upper()))
+
 def generate_playfair_matrix(key):
     key = clean_text(key).replace("J", "I")
     matrix = []
@@ -34,7 +35,7 @@ def process_playfair(text):
         pairs.append((a, b))
     return pairs
 
-def playfair_encrypt(text, key):
+def encrypt(text, key):
     matrix = generate_playfair_matrix(key)
     pairs = process_playfair(text)
     ciphertext = ''
@@ -49,7 +50,7 @@ def playfair_encrypt(text, key):
             ciphertext += matrix[ax][by] + matrix[bx][ay]
     return ciphertext
 
-def playfair_decrypt(text, key):
+def decrypt(text, key):
     matrix = generate_playfair_matrix(key)
     pairs = process_playfair(text)
     plaintext = ''
@@ -63,4 +64,3 @@ def playfair_decrypt(text, key):
         else:
             plaintext += matrix[ax][by] + matrix[bx][ay]
     return plaintext
-
