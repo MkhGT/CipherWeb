@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Web Enkripsi-Dekripsi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        select, input[type="text"], button {
+            padding: 8px;
+            margin: 10px 0;
+            width: 100%;
+        }
+        .result-box {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Program Enkripsi-Dekripsi Kriptografi Klasik</h1>
+
+    <form method="post">
+        <label for="algorithm">Pilih Algoritma:</label>
+        <select name="algorithm" id="algorithm" required>
+            <option value="autokey_vigenere" {% if algo == 'autokey_vigenere' %}selected{% endif %}>Auto-key Vigenere Cipher</option>
+            <option value="playfair" {% if algo == 'playfair' %}selected{% endif %}>Playfair Cipher</option>
+            <!-- Algoritma lain bisa ditambahkan di sini -->
+        </select>
+
+        <label for="mode">Mode Operasi:</label>
+        <select name="mode" id="mode" required>
+            <option value="encrypt" {% if mode == 'encrypt' %}selected{% endif %}>Enkripsi</option>
+            <option value="decrypt" {% if mode == 'decrypt' %}selected{% endif %}>Dekripsi</option>
+        </select>
+
+        <label for="key">Masukkan Kunci:</label>
+        <input type="text" name="key" id="key" placeholder="Contoh: KEY" required>
+
+        <label for="text">Masukkan Pesan:</label>
+        <textarea name="text" id="text" placeholder="Tulis teks di sini..." required></textarea>
+
+        <button type="submit">Proses</button>
+    </form>
+
+    {% if result %}
+    <h2>Hasil {{ 'Enkripsi' if mode == 'encrypt' else 'Dekripsi' }}</h2>
+    <div class="result-box">{{ result }}</div>
+    {% endif %}
+</body>
+</html>
