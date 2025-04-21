@@ -1,8 +1,9 @@
-# playfair.py
+import numpy as np
 import string
 
 ALPHABET = string.ascii_uppercase
 
+### PLAYFAIR CIPHER ###
 def clean_text(text):
     return ''.join(filter(str.isalpha, text.upper()))
 
@@ -35,6 +36,18 @@ def process_playfair(text):
         pairs.append((a, b))
     return pairs
 
+def clean_output(text):
+    # Hilangkan 'X' di tengah dua huruf yang sama, misal "HELXLO" → "HELLO"
+    cleaned = ''
+    i = 0
+    while i < len(text):
+        cleaned += text[i]
+        if i+2 < len(text) and text[i] == text[i+2] and text[i+1] == 'X':
+            i += 2  # skip X
+        else:
+            i += 1
+    return cleaned
+
 def encrypt(text, key):
     matrix = generate_playfair_matrix(key)
     pairs = process_playfair(text)
@@ -63,4 +76,4 @@ def decrypt(text, key):
             plaintext += matrix[(ax-1)%5][ay] + matrix[(bx-1)%5][by]
         else:
             plaintext += matrix[ax][by] + matrix[bx][ay]
-    return plaintext
+    return clean_output(plaintext)
