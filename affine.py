@@ -10,7 +10,7 @@ def mod_inverse(a, m):
     raise ValueError(f"Tidak ada inverse modular untuk a = {a} modulo {m}")
 
 def encrypt(text, key):
-    # Parsing key, pastikan key berformat 'a,b' misalnya '5,8'
+    # Parsing key, key berformat 'a,b' misalnya '5,8'
     try:
         a, b = map(int, key.split(','))
     except ValueError:
@@ -28,7 +28,7 @@ def encrypt(text, key):
     return ciphertext
 
 def decrypt(text, key):
-    # Parsing key, pastikan key berformat 'a,b' misalnya '5,8'
+    # Parsing key, key berformat 'a,b' misalnya '5,8'
     try:
         a, b = map(int, key.split(','))
     except ValueError:
