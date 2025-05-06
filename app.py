@@ -21,6 +21,8 @@ def index():
             result = autokey_vigenere.encrypt(text, key) if mode == 'encrypt' else autokey_vigenere.decrypt(text, key)
         elif algo == 'playfair':
             result = playfair.encrypt(text, key) if mode == 'encrypt' else playfair.decrypt(text, key)
+        elif algo == 'affine':
+            result = affine.encrypt(text, key) if mode == 'encrypt' else affine.decrypt(text, key)
 
     return render_template('index.html', result=result, mode=mode, algo=algo)
 
