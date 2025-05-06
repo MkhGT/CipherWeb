@@ -21,7 +21,7 @@ def index():
             result = autokey_vigenere.encrypt(text, key) if mode == 'encrypt' else autokey_vigenere.decrypt(text, key)
         elif algo == 'playfair':
             result = playfair.encrypt(text, key) if mode == 'encrypt' else playfair.decrypt(text, key)
-        if algo == 'affine':
+        elif algo == 'affine':
             try:
                 if ',' not in key:
                     raise ValueError("Format kunci untuk Affine harus 'a,b' (misalnya: '5,8')")
