@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request
 import autokey_vigenere
 import playfair
+import affine
+
 
 app = Flask(__name__)
 
