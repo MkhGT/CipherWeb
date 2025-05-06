@@ -37,6 +37,7 @@
         <select name="algorithm" id="algorithm" required>
             <option value="autokey_vigenere" {% if algo == 'autokey_vigenere' %}selected{% endif %}>Auto-key Vigenere Cipher</option>
             <option value="playfair" {% if algo == 'playfair' %}selected{% endif %}>Playfair Cipher</option>
+            <option value="affine" {% if algo == 'affine' %}selected{% endif %}>Affine Cipher</option>
             <!-- Algoritma lain bisa ditambahkan di sini -->
         </select>
 
