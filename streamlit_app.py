@@ -5,6 +5,7 @@ import autokey_vigenere
 import extended_vigenere
 import vigenere_standard
 import affine
+import hill_cipher as hill
 
 def format_output(text):
     no_space = text.replace(" ", "")
@@ -68,7 +69,7 @@ def main():
                 result = playfair.encrypt(input_text, key) if mode == "Enkripsi" else playfair.decrypt(input_text, key)
 
             elif cipher_type == "Hill Cipher":
-                result = hill_encrypt(input_text, key) if mode == "Enkripsi" else hill_decrypt(input_text, key)
+                result = hill.encrypt(input_text, key) if mode == "Enkripsi" else hill.decrypt(input_text, key)
 
             no_space, grouped = format_output(result)
             st.subheader("Hasil:")
