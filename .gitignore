@@ -3,3 +3,5 @@ extended_vignere_app.py
 vignere_standard_app.py
 templates/
 app.py
+uploads/
+outputs/
