@@ -1,5 +1,5 @@
-## How to use
+## How to run
 run this in your terminal at clone directory
 ```bash
-streamlit run streamlit_app.py
+python flask_app.py
 ```
