@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cipher Tools</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+  <h1 class="mb-4 text-center">Cipher Tools Web App</h1>
+
+  <form method="POST" enctype="multipart/form-data" class="border p-4 rounded shadow-sm bg-light">
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="cipher" class="form-label">Pilih Cipher:</label>
+        <select class="form-select" name="cipher" id="cipher" required onchange="toggleKeyFields()">
+          <option value="vigenere">Vigenère</option>
+          <option value="extended_vigenere">Extended Vigenère</option>
+          <option value="autokey">Autokey Vigenère</option>
+          <option value="playfair">Playfair</option>
+          <option value="hill">Hill</option>
+          <option value="affine">Affine</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Mode:</label>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="mode" id="encrypt" value="e" checked>
+          <label class="form-check-label" for="encrypt">Encrypt</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="mode" id="decrypt" value="d">
+          <label class="form-check-label" for="decrypt">Decrypt</label>
+        </div>
+      </div>
+    </div>
+
+    <div id="keyField" class="mb-3">
+      <label for="key" class="form-label">Key:</label>
+      <input type="text" class="form-control" name="key" id="key">
+    </div>
+
+    <div id="affineKeys" class="mb-3" style="display: none;">
+      <label class="form-label">Affine Keys:</label>
+      <div class="input-group">
+        <span class="input-group-text">a</span>
+        <input type="number" name="a" class="form-control">
+        <span class="input-group-text">b</span>
+        <input type="number" name="b" class="form-control">
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="text" class="form-label">Masukkan Teks Langsung:</label>
+      <textarea class="form-control" name="text" id="text" rows="4"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="file" class="form-label">Atau Upload File (.txt):</label>
+      <input class="form-control" type="file" name="file" accept=".txt">
+    </div>
+
+    <div class="d-grid">
+      <button type="submit" class="btn btn-primary">Proses</button>
+    </div>
+  </form>
+
+  {% if result %}
+    <div class="mt-5">
+      <h4>Hasil (Tanpa Spasi):</h4>
+      <div class="alert alert-secondary" style="white-space: pre-wrap;">{{ result }}</div>
+
+      <h4>Hasil (5 Huruf per Bagian):</h4>
+      <div class="alert alert-secondary" style="white-space: pre-wrap;">{{ grouped }}</div>
+
+      <a href="{{ url_for('download') }}" class="btn btn-success mt-3">Unduh Hasil</a>
+    </div>
+  {% endif %}
+</div>
+
+<script>
+//   function toggleKeyFields() {
+//     const cipher = document.getElementById("cipher").value;
+//     const keyField = document.getElementById("keyField");
+//     const affineKeys = document.getElementById("affineKeys");
+
+//     if (cipher === 'affine') {
+//       affineKeys.style.display = 'block';
+//       keyField.style.display = 'none';
+//     } else if (cipher === 'hill') {
+//       affineKeys.style.display = 'none';
+//       keyField.style.display = 'none';
+//     } else {
+//       keyField.style.display = 'block';
+//       affineKeys.style.display = 'none';
+//     }
+//   }
+//   window.onload = toggleKeyFields;
+</script>
+
+</body>
+</html>
