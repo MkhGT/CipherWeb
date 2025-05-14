@@ -17,17 +17,29 @@ def numbers_to_text(numbers):
     return ''.join([chr(n + ord('A')) for n in numbers])
 
 def parse_key(key_str):
-    """Parse kunci dari string ke matriks 2x2"""
+    """Parse kunci dari string ke matriks (otomatis deteksi ukuran 2x2 atau 3x3)"""
     try:
-        key_numbers = list(map(int, key_str.split(',')))
-        if len(key_numbers) != 4:
-            raise ValueError("Kunci harus 4 angka dipisahkan koma (contoh: 5,8,17,3)")
-        key_matrix = np.array(key_numbers).reshape(2, 2)
-        
-        # Validasi matriks harus invertible
+        # Coba parsing sebagai angka (format lama)
+        if ',' in key_str:
+            key_numbers = list(map(int, key_str.split(',')))
+            n = int(len(key_numbers) ** 0.5)
+            if n * n != len(key_numbers):
+                raise ValueError("Format angka: jumlah harus 4, 9, atau 16 angka")
+        else:
+            # Parsing sebagai huruf (format baru)
+            key_str = clean_text(key_str)
+            n = int(len(key_str) ** 0.5)
+            if n * n != len(key_str):
+                raise ValueError("Format huruf: panjang harus 4, 9, atau 16 karakter")
+            key_numbers = [ord(c) - ord('A') for c in key_str]
+
+        key_matrix = np.array(key_numbers).reshape(n, n)
         det = int(round(np.linalg.det(key_matrix)))
-        if gcd(det, 26) != 1:
-            raise ValueError("Determinan matriks kunci harus coprime dengan 26")
+        
+        if det == 0:
+            raise ValueError("Matriks kunci tidak bisa diinvers (determinan = 0)")
+        if gcd(det % 26, 26) != 1:
+            raise ValueError("Determinan matriks harus coprime dengan 26")
             
         return key_matrix
     except ValueError as e:
@@ -41,53 +53,58 @@ def modinv(a, m=26):
     raise ValueError(f"Tidak ada inverse modular untuk {a} modulo {m}")
 
 def encrypt(text, key):
-    """Enkripsi teks dengan Hill Cipher (2x2)"""
+    """Enkripsi teks dengan Hill Cipher"""
     key_matrix = parse_key(key)
     cleaned_text = clean_text(text)
+    n = key_matrix.shape[0]
     
-    # Padding jika panjang teks ganjil
-    if len(cleaned_text) % 2 != 0:
-        cleaned_text += 'X'
+    # Padding jika perlu
+    padding_length = n - len(cleaned_text) % n
+    if padding_length > 0:
+        cleaned_text += 'X' * padding_length
     
     numbers = text_to_numbers(cleaned_text)
     encrypted_numbers = []
     
-    for i in range(0, len(numbers), 2):
-        block = np.array(numbers[i:i+2])
+    for i in range(0, len(numbers), n):
+        block = np.array(numbers[i:i+n])
         encrypted_block = np.dot(key_matrix, block) % 26
         encrypted_numbers.extend(encrypted_block)
     
-    ciphertext = numbers_to_text(encrypted_numbers)
-    return ciphertext
+    return numbers_to_text(encrypted_numbers)
 
 def decrypt(text, key):
-    """Dekripsi teks dengan Hill Cipher (2x2)"""
+    """Dekripsi teks dengan Hill Cipher"""
     key_matrix = parse_key(key)
     cleaned_text = clean_text(text)
+    n = key_matrix.shape[0]
     
-    if len(cleaned_text) % 2 != 0:
-        raise ValueError("Panjang ciphertext harus genap")
+    if len(cleaned_text) % n != 0:
+        raise ValueError(f"Panjang ciphertext harus kelipatan {n}")
     
     # Hitung matriks invers
     det = int(round(np.linalg.det(key_matrix)))
     det_inv = modinv(det)
-    adjugate = np.array([[key_matrix[1,1], -key_matrix[0,1]], 
-                         [-key_matrix[1,0], key_matrix[0,0]]])
-    inv_matrix = (det_inv * adjugate) % 26
+    adjugate = np.round(np.linalg.inv(key_matrix) * det).astype(int)
+    inv_matrix = (adjugate * det_inv) % 26
     
     numbers = text_to_numbers(cleaned_text)
     decrypted_numbers = []
     
-    for i in range(0, len(numbers), 2):
-        block = np.array(numbers[i:i+2])
+    for i in range(0, len(numbers), n):
+        block = np.array(numbers[i:i+n])
         decrypted_block = np.dot(inv_matrix, block) % 26
         decrypted_numbers.extend(decrypted_block)
     
-    plaintext = numbers_to_text(decrypted_numbers)
-    return plaintext
+    # Hapus padding
+    decrypted_text = numbers_to_text(decrypted_numbers)
+    if decrypted_text.endswith('X'):
+        decrypted_text = decrypted_text[:-decrypted_text.count('X')]
+    
+    return decrypted_text
 
 def format_output(text):
-    """Format output: tanpa spasi dan kelompok 5 huruf"""
+    """Format output untuk kompatibilitas"""
     no_space = text.replace(" ", "")
     grouped = ' '.join([no_space[i:i+5] for i in range(0, len(no_space), 5)])
     return no_space, grouped
