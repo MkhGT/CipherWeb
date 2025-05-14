@@ -5,10 +5,14 @@ def clean_text(text):
     return ''.join(filter(str.isalpha, text.upper()))
 
 def mod_inverse(a, m):
-    for x in range(1, m):
-        if (a * x) % m == 1:
-            return x
-    raise ValueError(f"Tidak ada inverse modular untuk a = {a} modulo {m}")
+    m0, x0, x1 = m, 0, 1
+    if m == 1:
+        return 0
+    while a > 1:
+        q = a // m
+        a, m = m, a % m
+        x0, x1 = x1 - q * x0, x0
+    return x1 + m0 if x1 < 0 else x1
 
 def encrypt(text, key):
     # Parsing key, key berformat 'a,b' misalnya '5,8'
