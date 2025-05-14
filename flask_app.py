@@ -50,7 +50,7 @@ def index():
         elif cipher == 'playfair':
             result = playfair.encrypt(text, key) if mode == 'e' else playfair.decrypt(text, key)
         elif cipher == 'hill':
-            result = hill_cipher.encrypt(text, default_key_matrix) if mode == 'e' else hill_cipher.decrypt(text, default_key_matrix)
+            result = hill_cipher.encrypt(text, key) if mode == 'e' else hill_cipher.decrypt(text, key)
         elif cipher == 'affine':
             result = affine.encrypt(text, key) if mode == 'e' else affine.decrypt(text, key)
 
